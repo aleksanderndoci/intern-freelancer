@@ -1,6 +1,5 @@
 package al.ikubinfo.internship.freelancer.entity;
 
-import al.ikubinfo.internship.freelancer.entity.common.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -16,5 +15,13 @@ public class TestEntity extends BaseEntity {
 
     @Column(name = "value")
     private String value;
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
+	}
 
 }

@@ -8,17 +8,17 @@ import org.springframework.stereotype.Component;
 @Component
 public class TestMapperImpl implements Mapper<TestEntity, TestModel> {
 
-    @Override
-    public TestEntity toEntity(TestModel model) {
-        TestEntity testEntity = new TestEntity();
-        testEntity.setValue(model.getValue());
-        return testEntity;
-    }
+	@Override
+	public TestEntity toEntity(TestModel model) {
+		TestEntity testEntity = new TestEntity();
+		testEntity.setValue(model.getValue());
+		return testEntity;
+	}
 
-    @Override
-    public TestModel toModel(TestEntity entity) {
-        TestModel testModel = new TestModel();
-        testModel.setValue(entity.getValue());
-        return testModel;
-    }
+	@Override
+	public TestModel toModel(TestEntity entity) {
+		TestModel testModel = new TestModel();
+		testModel.setValue(entity.getValue());
+		return testModel;
+	}
 }
