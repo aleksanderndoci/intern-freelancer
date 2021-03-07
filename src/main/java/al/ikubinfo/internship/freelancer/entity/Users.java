@@ -40,7 +40,7 @@ public class Users extends BaseEntity {
 
 	@Column(name = "activation_status")
 	private String activationStatus;
-
+ 
 	@Column(name = "role")
 	@Enumerated(value = EnumType.STRING)
 	@OneToOne

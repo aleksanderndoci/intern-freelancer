@@ -23,5 +23,5 @@ public class TestEntity extends BaseEntity {
 	public void setValue(String value) {
 		this.value = value;
 	}
-
+ 
 }

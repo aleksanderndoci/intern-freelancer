@@ -9,7 +9,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "experience")
+@Table(name = "experience") 
 public class Experience extends BaseEntity {
 
 	@Column(name = "name_of_company")

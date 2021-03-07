@@ -7,7 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-@Entity
+@Entity 
 @Table(name = "skill")
 public class Skill {
 

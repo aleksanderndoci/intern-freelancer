@@ -1,6 +1,6 @@
 package al.ikubinfo.internship.freelancer.entity;
 
-import java.util.Date;
+import java.util.Date; 
 import java.util.List;
 
 import javax.persistence.Column;

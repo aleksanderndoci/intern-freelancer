@@ -7,7 +7,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="education")
+@Table(name="education") 
 public class Education extends BaseEntity {
 
 	@Column(name = "name_of_institution")
