@@ -1,22 +1,24 @@
 package al.ikubinfo.internship.freelancer.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
  
-@Entity
-@Table(name = "role")
-public enum Role {
 
+public enum Role{
+    
 	ADMIN("ADMIN"), EMPLOYER("EMPLOYER"), FREELANCER("FREELANCE");
+	
+    
+	private String role;
 
-	private String message;
-
-	Role(String message) {
-		this.message = message;
+	
+	Role(String role) {
+		this.role = role;
 	}
 
 	public String getMessage() {
-		return message;
+		return role;
 	}
 
 }

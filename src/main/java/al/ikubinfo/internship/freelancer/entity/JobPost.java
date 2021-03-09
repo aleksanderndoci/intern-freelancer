@@ -13,7 +13,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "job_post")
-public class JobPost {
+public class JobPost extends BaseEntity {
 
 	@Column(name = "position")
 	private String position;
@@ -37,6 +37,9 @@ public class JobPost {
 
 	@ManyToMany(mappedBy = "jobPostsApplication")
 	private List<Users> usersApplication;
+	
+	@Column(name="job_post_type")
+	private String jobPostType;
 
 	public String getPosition() {
 		return position;
@@ -92,6 +95,14 @@ public class JobPost {
 
 	public void setUsersApplication(List<Users> usersApplication) {
 		this.usersApplication = usersApplication;
+	}
+
+	public String getJobPostType() {
+		return jobPostType;
+	}
+
+	public void setJobPostType(String jobPostType) {
+		this.jobPostType = jobPostType;
 	}
 	
 	

@@ -9,21 +9,21 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("test")
 public class TestController {
 
-    private final TestService testService;
-
-    public TestController(TestService testService) {
-        this.testService = testService;
-    }
-
-    @PostMapping("/add")
-    public ResponseEntity<TestModel> addTest(@RequestBody TestModel testModel) {
-        return ResponseEntity
-                .ok(testService.addTest(testModel));
-    }
-
-    @GetMapping("findById/{id}")
-    public ResponseEntity<TestModel> getTestById(@PathVariable Integer id) {
-        return ResponseEntity
-                .ok(testService.findById(id));
-    }
+//    private final TestService testService;
+//
+//    public TestController(TestService testService) {
+//        this.testService = testService;
+//    }
+//
+//    @PostMapping("/add")
+//    public ResponseEntity<TestModel> addTest(@RequestBody TestModel testModel) {
+//        return ResponseEntity
+//                .ok(testService.addTest(testModel));
+//    }
+//
+//    @GetMapping("findById/{id}")
+//    public ResponseEntity<TestModel> getTestById(@PathVariable Integer id) {
+//        return ResponseEntity
+//                .ok(testService.findById(id));
+//    }
 }
