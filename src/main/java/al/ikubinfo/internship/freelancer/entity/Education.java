@@ -2,13 +2,28 @@ package al.ikubinfo.internship.freelancer.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Setter
+@Getter
+@NoArgsConstructor
 @Entity
-@Table(name="education") 
-public class Education extends BaseEntity {
+@Table(name = "education")
+public class Education {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
 
 	@Column(name = "name_of_institution")
 	private String nameOfInstitution;
@@ -29,63 +44,9 @@ public class Education extends BaseEntity {
 	private String endDate;
 
 	@ManyToOne
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "user_id",foreignKey = @ForeignKey(name="user_id_FK"))
 	private Users user;
 
-	public String getNameOfInstitution() {
-		return nameOfInstitution;
-	}
-
-	public void setNameOfInstitution(String nameOfInstitution) {
-		this.nameOfInstitution = nameOfInstitution;
-	}
-
-	public String getLevel() {
-		return level;
-	}
-
-	public void setLevel(String level) {
-		this.level = level;
-	}
-
-	public String getFieldOfStudy() {
-		return fieldOfStudy;
-	}
-
-	public void setFieldOfStudy(String fieldOfStudy) {
-		this.fieldOfStudy = fieldOfStudy;
-	}
-
-	public String getExtraInfo() {
-		return extraInfo;
-	}
-
-	public void setExtraInfo(String extraInfo) {
-		this.extraInfo = extraInfo;
-	}
-
-	public String getStartDate() {
-		return startDate;
-	}
-
-	public void setStartDate(String startDate) {
-		this.startDate = startDate;
-	}
-
-	public String getEndDate() {
-		return endDate;
-	}
-
-	public void setEndDate(String endDate) {
-		this.endDate = endDate;
-	}
-
-	public Users getUser() {
-		return user;
-	}
-
-	public void setUser(Users user) {
-		this.user = user;
-	}
+	
 
 }

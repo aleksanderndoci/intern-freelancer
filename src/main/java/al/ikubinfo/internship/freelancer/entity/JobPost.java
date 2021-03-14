@@ -1,19 +1,35 @@
 package al.ikubinfo.internship.freelancer.entity;
 
-import java.util.Date; 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Setter
+@Getter
+@NoArgsConstructor
 @Entity
 @Table(name = "job_post")
-public class JobPost extends BaseEntity {
+public class JobPost {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
 
 	@Column(name = "position")
 	private String position;
@@ -32,79 +48,17 @@ public class JobPost extends BaseEntity {
 	private Date jobPostDate;
 
 	@ManyToOne
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "user_id",foreignKey = @ForeignKey(name="user_id_FK"))
 	private Users user;
 
 	@ManyToMany(mappedBy = "jobPostsApplication")
 	private List<Users> usersApplication;
-	
-	@Column(name="job_post_type")
+
+	@Column(name = "job_post_type")
 	private String jobPostType;
-
-	public String getPosition() {
-		return position;
-	}
-
-	public void setPosition(String position) {
-		this.position = position;
-	}
-
-	public String getPositionDescription() {
-		return positionDescription;
-	}
-
-	public void setPositionDescription(String positionDescription) {
-		this.positionDescription = positionDescription;
-	}
-
-	public double getSalary() {
-		return salary;
-	}
-
-	public void setSalary(double salary) {
-		this.salary = salary;
-	}
-
-	public String getWorkingHour() {
-		return workingHour;
-	}
-
-	public void setWorkingHour(String workingHour) {
-		this.workingHour = workingHour;
-	}
-
-	public Date getJobPostDate() {
-		return jobPostDate;
-	}
-
-	public void setJobPostDate(Date jobPostDate) {
-		this.jobPostDate = jobPostDate;
-	}
-
-	public Users getUser() {
-		return user;
-	}
-
-	public void setUser(Users user) {
-		this.user = user;
-	}
-
-	public List<Users> getUsersApplication() {
-		return usersApplication;
-	}
-
-	public void setUsersApplication(List<Users> usersApplication) {
-		this.usersApplication = usersApplication;
-	}
-
-	public String getJobPostType() {
-		return jobPostType;
-	}
-
-	public void setJobPostType(String jobPostType) {
-		this.jobPostType = jobPostType;
-	}
 	
-	
+	//inverse references
+		@OneToMany(mappedBy = "jobPost")
+		List<Application> applicationStatus;
 
 }

@@ -1,8 +1,5 @@
 package al.ikubinfo.internship.freelancer.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
  
 
 public enum Role{

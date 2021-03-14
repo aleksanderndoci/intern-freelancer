@@ -10,7 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import al.ikubinfo.internship.freelancer.service.UsersService;
+import al.ikubinfo.internship.freelancer.service.registration.RegistrationService;
 import lombok.AllArgsConstructor;
 
 @Configuration
@@ -21,7 +21,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 	@Autowired
-	private final UsersService userService;
+	private final RegistrationService registerService;
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -38,7 +38,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	public DaoAuthenticationProvider daoAuthenticationProvider() {
 		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
 		provider.setPasswordEncoder(bCryptPasswordEncoder);
-		provider.setUserDetailsService(userService);
+		provider.setUserDetailsService(registerService);
 		return provider;
 	}
 }

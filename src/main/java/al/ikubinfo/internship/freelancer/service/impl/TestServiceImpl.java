@@ -3,7 +3,6 @@ package al.ikubinfo.internship.freelancer.service.impl;
 import al.ikubinfo.internship.freelancer.entity.Users;
 import al.ikubinfo.internship.freelancer.mapper.Mapper;
 import al.ikubinfo.internship.freelancer.model.TestModel;
-import al.ikubinfo.internship.freelancer.repository.UserRepository;
 import al.ikubinfo.internship.freelancer.service.TestService;
 import lombok.extern.slf4j.Slf4j;
 

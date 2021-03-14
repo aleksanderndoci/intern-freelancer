@@ -16,7 +16,7 @@ public class UserMapperImpl implements Mapper<Users, UserModel> {
 		userEntity.setName(model.getName());
 		userEntity.setSurname(model.getSurname());
 		userEntity.setEmail(model.getEmail());
-		userEntity.setPassw(model.getPassword());
+		userEntity.setPassword(model.getPassword());
 		userEntity.setCountry(model.getCountry());
 		userEntity.setBirthday(model.getBirthday());
 		userEntity.setActivationStatus(model.getActivationStatus());
@@ -36,7 +36,7 @@ public class UserMapperImpl implements Mapper<Users, UserModel> {
 		userModel.setName(entity.getName());
 		userModel.setSurname(entity.getSurname());
 		userModel.setEmail(entity.getEmail());
-		userModel.setPassword(entity.getPassw());
+		userModel.setPassword(entity.getPassword());
 		userModel.setCountry(entity.getCountry());
 		userModel.setBirthday(entity.getBirthday());
 		userModel.setActivationStatus(entity.getActivationStatus());

@@ -2,14 +2,40 @@ server:
   port: 8080
   servlet:
     context-path: /api
+  
+
+
+
 spring:
+
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/postgres
+    url: jdbc:postgresql://localhost:5432/freelancer
     username: postgres
-    password: postgrespass
+    password: makarona123
     platform: org.hibernate.dialect.PostgreSQLDialect
+
+  
+
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: validate
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+  mail:
+    host: localhost
+    port: 1025
+    username: hello
+    password: hello
+
+    properties:
+      mail:
+        smtp:
+          ssl:
+            trust: "*"
+          auth: true
+          starttls:
+            enable: true
+          connectiontimeout: 5000
+          timeout: 3000
+          writetimeout: 5000

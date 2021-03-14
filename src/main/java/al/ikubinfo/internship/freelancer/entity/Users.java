@@ -10,6 +10,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,6 +19,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -27,6 +29,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 
 @Getter
@@ -34,9 +37,20 @@ import lombok.Setter;
 @EqualsAndHashCode 
 @NoArgsConstructor
 @Entity
-@Table(name = "users")
+@ToString
+@Table(name = "users",
+uniqueConstraints = {
+		@UniqueConstraint(name="user_email_unique",columnNames = "email")
+		
+}
+)
 public class Users implements UserDetails {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
@@ -51,7 +65,7 @@ public class Users implements UserDetails {
 	private String email;
 
 	@Column(name = "password")
-	private String passw;
+	private String password;
 
 	@Column(name = "birthday")
 	private Date birthday;
@@ -67,9 +81,10 @@ public class Users implements UserDetails {
 	private Role role;
 	
 	@Column(name="locked")
-	private Boolean locked;
+	private Boolean locked =false;
+	
 	@Column(name="enabled")
-	private Boolean enabled;
+	private Boolean enabled =false;
 
 	@ManyToMany
 	@JoinTable(name = "user_skill", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "skill_name"))
@@ -85,26 +100,33 @@ public class Users implements UserDetails {
 	private List<JobPost> jobPosts;
 
 	@ManyToMany
-	@JoinTable(name = "application", joinColumns = @JoinColumn(name = "job_post_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+	@JoinTable(name = "application", joinColumns = @JoinColumn(name = "job_post_id"),
+			 inverseJoinColumns = @JoinColumn(name = "user_id"))
 	private List<JobPost> jobPostsApplication;
+	
+	//inverse references
+	@OneToMany(mappedBy = "user")
+	List<Application> applicationStatus;
 
 	
 
-	public Users(Integer id, String name, String surname, String email, String passw, Date birthday, String country,
-			String activationStatus, Role role, Boolean locked, Boolean enabled) {
+	public Users(String name, String surname, String email, String passw
+//			, Date birthday, String country,
+//			String activationStatus
+			) 
+			{
 		super();
-		this.id = id;
 		this.name = name;
 		this.surname = surname;
 		this.email = email;
-		this.passw = passw;
-		this.birthday = birthday;
-		this.country = country;
-		this.activationStatus = activationStatus;
-		this.role = role;
-		this.locked = locked;
-		this.enabled = enabled;
+		this.password = passw;
+//		this.birthday = birthday;
+//		this.country = country;
+//		this.activationStatus=activationStatus;
+//	
 	}
+	
+	
 	
 	
 	@Override
@@ -116,7 +138,7 @@ public class Users implements UserDetails {
 
 	@Override
 	public String getPassword() {
-		return passw;
+		return password;
 	}
 
 	@Override
@@ -143,6 +165,15 @@ public class Users implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return enabled;
+	}
+
+
+
+
+	public Users(String email, String password) {
+		super();
+		this.email = email;
+		this.password = password;
 	}
 
 

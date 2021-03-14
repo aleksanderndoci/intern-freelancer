@@ -4,14 +4,29 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-@Entity
-@Table(name = "experience") 
-public class Experience extends BaseEntity {
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Setter
+@Getter
+@NoArgsConstructor
+@Entity
+@Table(name = "experience")
+public class Experience {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
+	
 	@Column(name = "name_of_company")
 	private String nameOfCompany;
 
@@ -28,55 +43,9 @@ public class Experience extends BaseEntity {
 	private Date endDate;
 
 	@ManyToOne
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "user_id", foreignKey = @ForeignKey(name="user_id_FK"))
 	private Users user;
 
-	public String getNameOfCompany() {
-		return nameOfCompany;
-	}
 
-	public void setNameOfCompany(String nameOfCompany) {
-		this.nameOfCompany = nameOfCompany;
-	}
-
-	public String getPosition() {
-		return position;
-	}
-
-	public void setPosition(String position) {
-		this.position = position;
-	}
-
-	public String getPositionDescription() {
-		return positionDescription;
-	}
-
-	public void setPositionDescription(String positionDescription) {
-		this.positionDescription = positionDescription;
-	}
-
-	public Date getStartDate() {
-		return startDate;
-	}
-
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-
-	public Date getEndDate() {
-		return endDate;
-	}
-
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
-
-	public Users getUser() {
-		return user;
-	}
-
-	public void setUser(Users user) {
-		this.user = user;
-	}
 
 }
