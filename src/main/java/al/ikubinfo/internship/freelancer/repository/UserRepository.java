@@ -1,4 +1,4 @@
-package al.ikubinfo.internship.freelancer.repository.registration;
+package al.ikubinfo.internship.freelancer.repository;
 
 import java.util.Optional;
 
@@ -15,6 +15,8 @@ import al.ikubinfo.internship.freelancer.entity.Users;
 public interface UserRepository extends JpaRepository<Users, Integer> {
 
 	Optional<Users> findByEmail(String email);
+	
+
 
 	@Transactional
 	@Modifying

@@ -80,6 +80,7 @@ public class Users implements UserDetails {
 	@Column(name = "role")
 	private Role role;
 	
+	
 	@Column(name="locked")
 	private Boolean locked =false;
 	
@@ -110,7 +111,7 @@ public class Users implements UserDetails {
 
 	
 
-	public Users(String name, String surname, String email, String passw
+	public Users(String name, String surname, String email, String passw, Role role
 //			, Date birthday, String country,
 //			String activationStatus
 			) 
@@ -120,6 +121,7 @@ public class Users implements UserDetails {
 		this.surname = surname;
 		this.email = email;
 		this.password = passw;
+		this.role=role;
 //		this.birthday = birthday;
 //		this.country = country;
 //		this.activationStatus=activationStatus;
