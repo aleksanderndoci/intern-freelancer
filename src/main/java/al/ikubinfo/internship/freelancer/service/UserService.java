@@ -1,17 +1,5 @@
 package al.ikubinfo.internship.freelancer.service;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
-
-import javax.transaction.Transactional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
-
 import al.ikubinfo.internship.freelancer.entity.ConfirmationToken;
 import al.ikubinfo.internship.freelancer.entity.Users;
 import al.ikubinfo.internship.freelancer.model.LoginRequest;
@@ -21,70 +9,80 @@ import al.ikubinfo.internship.freelancer.service.registration.ConfirmationTokenS
 import al.ikubinfo.internship.freelancer.service.registration.EmailSender;
 import al.ikubinfo.internship.freelancer.service.registration.EmailValidator;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
 public class UserService implements UserDetailsService {
 
-	private final static String USER_NOT_FOUND = "User with email %s not found!";
+    private final static String USER_NOT_FOUND = "User with email %s not found!";
 
-	@Autowired
-	private final UserRepository userRepository;
+    @Autowired
+    private final UserRepository userRepository;
 
-	@Autowired
-	private final EmailValidator emailValidator;
+    @Autowired
+    private final EmailValidator emailValidator;
 
-	@Autowired
-	private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired
+    private final PasswordEncoder passwordEncoder;
 
-	@Autowired
-	private ConfirmationTokenService confirmationTokenService;
-	
-	@Autowired
-	private EmailSender emailSender;
+    @Autowired
+    private ConfirmationTokenService confirmationTokenService;
 
-	@Override
-	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-		return userRepository.findByEmail(email)
-				.orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND, email)));
-	}
+    @Autowired
+    private EmailSender emailSender;
 
-	public String register(RegistrationRequest request) {
-		boolean validEmail = emailValidator.test(request.getEmail());
-		if (!validEmail) {
-			throw new IllegalStateException("Email not valid!");
-		}
-		String token =  signUpUser(
-				new Users(request.getName(), request.getSurname(), request.getEmail(), request.getPassword()));
-		
-		String fullName= request.getName().concat(" "+request.getSurname());
-		String link ="http://localhost:8080/api/user/registration/confirm?token="+token;
-		emailSender.sendEmail(request.getEmail(), buildEmail(fullName, link));
-		
-		return token;
-		
-	}
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND, email)));
+    }
 
-	public String signUpUser(Users user) {
-		boolean userExists = userRepository.findByEmail(user.getEmail()).isPresent();
-		if (userExists) {
-			throw new IllegalStateException("Email is taken!");
-		}
-		String passEncoded = bCryptPasswordEncoder.encode(user.getPassword());
+    public String register(RegistrationRequest request) {
+        boolean validEmail = emailValidator.test(request.getEmail());
+        if (!validEmail) {
+            throw new IllegalStateException("Email not valid!");
+        }
+        String token = signUpUser(
+                new Users(request.getName(), request.getSurname(), request.getEmail(), request.getPassword()));
 
-		user.setPassword(passEncoded);
+        String fullName = request.getName().concat(" " + request.getSurname());
+        String link = "http://localhost:8080/api/user/registration/confirm?token=" + token;
+     //   emailSender.sendEmail(request.getEmail(), buildEmail(fullName, link));
 
-		userRepository.save(user);
+        return token;
 
-		
-		String token = UUID.randomUUID().toString();
-		
-		ConfirmationToken confirmationToken = new ConfirmationToken(token, LocalDateTime.now(),
-				LocalDateTime.now().plusMinutes(15), user);
-		
-		confirmationTokenService.saveConfirmationToken(confirmationToken);
-		
-		return token;
+    }
+
+    public String signUpUser(Users user) {
+        boolean userExists = userRepository.findByEmail(user.getEmail()).isPresent();
+        if (userExists) {
+            throw new IllegalStateException("Email is taken!");
+        }
+        String passEncoded = passwordEncoder.encode(user.getPassword());
+
+        user.setPassword(passEncoded);
+
+        userRepository.save(user);
+
+
+        String token = UUID.randomUUID().toString();
+
+        ConfirmationToken confirmationToken = new ConfirmationToken(token, LocalDateTime.now(),
+                LocalDateTime.now().plusMinutes(15), user);
+
+        confirmationTokenService.saveConfirmationToken(confirmationToken);
+
+        return token;
 
 		
 
@@ -100,22 +98,23 @@ public class UserService implements UserDetailsService {
 	                .orElseThrow(() ->
 	                        new IllegalStateException("token not found"));
 
-	        if (confirmationToken.getConfirmedAt() != null) {
-	            throw new IllegalStateException("email already confirmed");
-	        }
+        if (confirmationToken.getConfirmedAt() != null) {
+            throw new IllegalStateException("email already confirmed");
+        }
 
-	        LocalDateTime expiredAt = confirmationToken.getExpiresAt();
+        LocalDateTime expiredAt = confirmationToken.getExpiresAt();
 
-	        if (expiredAt.isBefore(LocalDateTime.now())) {
-	            throw new IllegalStateException("token expired");
-	        }
+        if (expiredAt.isBefore(LocalDateTime.now())) {
+            throw new IllegalStateException("token expired");
+        }
 
-	        confirmationTokenService.setConfirmedAt(token);
-	        enableUser(confirmationToken.getUser().getEmail());
-	        
-	        return "confirmed";
-	    }
-	private String buildEmail(String name, String link) {
+        confirmationTokenService.setConfirmedAt(token);
+        enableUser(confirmationToken.getUser().getEmail());
+
+        return "confirmed";
+    }
+
+    private String buildEmail(String name, String link) {
         return "<div style=\"font-family:Helvetica,Arial,sans-serif;font-size:16px;margin:0;color:#0b0c0c\">\n" +
                 "\n" +
                 "<span style=\"display:none;font-size:1px;color:#fff;max-height:0\"></span>\n" +
@@ -183,26 +182,26 @@ public class UserService implements UserDetailsService {
                 "\n" +
                 "</div></div>";
     }
-	
-	
-	//login
-	
-	public String login(LoginRequest loginRequest) {
-		
-		return validUser(new Users(loginRequest.getEmail(), loginRequest.getPassword()));
-		
-	}
-	
-	public String validUser(Users user) {
-		boolean userExists = userRepository.validUser(
-				user.getEmail(),user.getPassword());
-		
-		boolean isLocked = userRepository.locked(user.getEmail());
-		if(userExists && isLocked==false) {
-			userRepository.lockUser(user.getEmail());
-		    return "User is logged in.";
-		}
-		return "Wrong username or password";
-		
-	}
+
+
+    //login
+
+    public String login(LoginRequest loginRequest) {
+
+        return validUser(new Users(loginRequest.getEmail(), loginRequest.getPassword()));
+
+    }
+
+    public String validUser(Users user) {
+        boolean userExists = userRepository.validUser(
+                user.getEmail(), user.getPassword());
+
+        boolean isLocked = userRepository.locked(user.getEmail());
+        if (userExists && isLocked == false) {
+            userRepository.lockUser(user.getEmail());
+            return "User is logged in.";
+        }
+        return "Wrong username or password";
+
+    }
 }
