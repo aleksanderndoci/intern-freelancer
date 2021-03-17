@@ -3,6 +3,8 @@ package al.ikubinfo.internship.freelancer.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +19,7 @@ import al.ikubinfo.internship.freelancer.entity.Experience;
 import al.ikubinfo.internship.freelancer.model.ExperienceModel;
 import al.ikubinfo.internship.freelancer.model.LoginRequest;
 import al.ikubinfo.internship.freelancer.model.RegistrationRequest;
+import al.ikubinfo.internship.freelancer.model.UserModel;
 import al.ikubinfo.internship.freelancer.service.ExperienceService;
 import al.ikubinfo.internship.freelancer.service.UserService;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -44,6 +47,7 @@ public class UserController {
 		}
 		return null;
 	}
+	
 	
 	@GetMapping(path="registration/confirm")
 	public String confirmEmail(@RequestParam("token") String token)
@@ -73,5 +77,15 @@ public class UserController {
 		return experienceService.deleteExperience(id);
 	}
 	
+	@GetMapping(path="getExperiences/{userId}")
+	public List<Experience> getExpersByUserId(@PathVariable int userId){
+		return experienceService.getExperiencesByUserId(userId);
+	}
+	
+//	@GetMapping(path="/getUserById/{userId}")
+//	@ResponseBody
+//	public ResponseEntity<UserModel> getUserById(@PathVariable Integer userId){
+//		return ResponseEntity.ok(userService.getUserById(userId));
+//	}
 	
 }

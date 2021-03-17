@@ -12,5 +12,9 @@ public interface ExperienceService {
 	List<Experience> addExperiences(List<Experience> experiences);
 
 	String deleteExperience(int id);
+	
+	List<Experience> getExperiencesByUserId(int id);
+	
+	
 
 }

@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import al.ikubinfo.internship.freelancer.entity.Experience;
 import al.ikubinfo.internship.freelancer.mapper.Mapper;
 import al.ikubinfo.internship.freelancer.model.ExperienceModel;
-import al.ikubinfo.internship.freelancer.repository.ExperinceRepository;
+import al.ikubinfo.internship.freelancer.repository.ExperienceRepository;
 import al.ikubinfo.internship.freelancer.service.ExperienceService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,12 +19,12 @@ import lombok.extern.slf4j.Slf4j;
 public class ExperienceServiceImple implements ExperienceService {
 
 	@Autowired
-	private final ExperinceRepository repository;
+	private final ExperienceRepository repository;
 
 	private final Mapper<Experience, ExperienceModel> expMapper;
 
 	public ExperienceServiceImple(Mapper<Experience, ExperienceModel> expMapper,
-			ExperinceRepository experinceRepository) {
+			ExperienceRepository experinceRepository) {
 		this.repository = experinceRepository;
 		this.expMapper = expMapper;
 	}
@@ -44,9 +44,20 @@ public class ExperienceServiceImple implements ExperienceService {
 	@Override
 	public String deleteExperience(int id) {
 		Experience experience = repository.getOne(id);
-		repository.delete(experience);;
-		
-		return "Experience with id"+id + " is deleted!";
+		repository.delete(experience);
+		;
+
+		return String.format("Experience with %d , position %s at company %s", id, experience.getPosition(),
+				experience.getNameOfCompany());
+
 	}
+
+	@Override
+	public List<Experience> getExperiencesByUserId(int userId) {
+		
+		return repository.getExperiencesByUserUserId(userId);
+	}
+	
+	
 
 }
