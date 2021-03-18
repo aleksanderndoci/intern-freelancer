@@ -37,27 +37,26 @@ public class ExperienceServiceImple implements ExperienceService {
 	}
 
 	@Override
-	public List<Experience> addExperiences(List<Experience> experiences) {
-		return repository.saveAll(experiences);
+	public List<ExperienceModel> addExperiences(List<ExperienceModel> experienceModelList) {
+		List<Experience> experienceEntityList = expMapper.toEntityList(experienceModelList);
+		repository.saveAll(experienceEntityList);
+		return expMapper.toModelList(experienceEntityList);
 	}
 
 	@Override
 	public String deleteExperience(int id) {
 		Experience experience = repository.getOne(id);
 		repository.delete(experience);
-		;
-
-		return String.format("Experience with %d , position %s at company %s", id, experience.getPosition(),
+		return String.format("Experience with %d , position %s at company %s IS DELETED", id, experience.getPosition(),
 				experience.getNameOfCompany());
 
-	}
+	}//handle exception if an id does not exists
 
 	@Override
-	public List<Experience> getExperiencesByUserId(int userId) {
-		
-		return repository.getExperiencesByUserUserId(userId);
+	public List<ExperienceModel> getExperiencesByUserId(int userId) {
+		List<Experience> experienceEntityList = repository.findByUserId(userId);
+		return expMapper.toModelList(experienceEntityList);
 	}
-	
-	
 
+	
 }

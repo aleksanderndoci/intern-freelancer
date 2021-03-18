@@ -27,7 +27,7 @@ public class Application {
 	@ManyToOne
 	@MapsId("userId")
 	@JoinColumn(name="user_id")
-	private Users user;
+	private User user;
 	
 	private String applicationStatus;
 	

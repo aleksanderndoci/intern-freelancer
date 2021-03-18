@@ -44,7 +44,7 @@ public class Experience {
 
 	@ManyToOne
 	@JoinColumn(name = "user_id", foreignKey = @ForeignKey(name="user_id_FK"))
-	private Users user;
+	private User user;
 
 
 

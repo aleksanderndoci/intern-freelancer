@@ -1,6 +1,6 @@
 package al.ikubinfo.internship.freelancer.service.impl;
 
-import al.ikubinfo.internship.freelancer.entity.Users;
+import al.ikubinfo.internship.freelancer.entity.User;
 import al.ikubinfo.internship.freelancer.mapper.Mapper;
 import al.ikubinfo.internship.freelancer.model.TestModel;
 import al.ikubinfo.internship.freelancer.service.TestService;
@@ -19,9 +19,9 @@ public class TestServiceImpl implements TestService {
 //    @Autowired
 //    private final UserRepository testRepository;
 //
-//    private final Mapper<Users, TestModel> testMapper;
+//    private final Mapper<User, TestModel> testMapper;
 //
-//    public TestServiceImpl(Mapper<Users, TestModel> testMapper,
+//    public TestServiceImpl(Mapper<User, TestModel> testMapper,
 //                           UserRepository testRepository) {
 //        this.testMapper = testMapper;
 //        this.testRepository = testRepository;
@@ -29,7 +29,7 @@ public class TestServiceImpl implements TestService {
 //
   @Override
   public TestModel addTest(TestModel testModel) {
-//        Users testEntity = testMapper.toEntity(testModel);
+//        User testEntity = testMapper.toEntity(testModel);
 //        testRepository.save(testEntity);
 //        return testMapper.toModel(testEntity);
 	  return null;
@@ -37,7 +37,7 @@ public class TestServiceImpl implements TestService {
 //
  @Override
   public TestModel findById(Integer id) {
-//        Users testEntity = testRepository.findById(id)
+//        User testEntity = testRepository.findById(id)
 //                .orElseThrow(EntityNotFoundException::new);
 //        return testMapper.toModel(testEntity);
   return null;

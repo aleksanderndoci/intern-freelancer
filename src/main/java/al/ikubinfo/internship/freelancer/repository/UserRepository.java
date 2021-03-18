@@ -9,34 +9,28 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import al.ikubinfo.internship.freelancer.entity.Users;
+import al.ikubinfo.internship.freelancer.entity.User;
 
 @Repository
 @Transactional(readOnly = true)
-public interface UserRepository extends JpaRepository<Users, Integer> {
+public interface UserRepository extends JpaRepository<User, Integer> {
 
-	Optional<Users> findByEmail(String email);
-	
-    
+	Optional<User> findByEmail(String email);
 
 	@Transactional
 	@Modifying
-	@Query("UPDATE Users u SET u.enabled = true WHERE u.email = ?1")
+	@Query("UPDATE User u SET u.enabled = true WHERE u.email = ?1")
 	int enableUser(String email);
 
-	@Query(value="SELECT COUNT(*) FROM Users u WHERE u.email = ?1 AND u.password = ?2",
-			nativeQuery = true)
+	@Query(value = "SELECT COUNT(*) FROM User u WHERE u.email = ?1 AND u.password = ?2", nativeQuery = true)
 	boolean validUser(String email, String password);
-	
-	@Query("Select u.locked from Users u where u.email = ?1")
-	boolean locked(String email);
+
+	@Query(value = "Select u.locked from users u where u.email = ?1", nativeQuery = true)
+	boolean checkIfLocked(String email);
 
 	@Transactional
 	@Modifying
-	@Query("UPDATE Users u SET u.locked = true WHERE u.email= ?1")
+	@Query("UPDATE User u SET u.locked = true WHERE u.email= ?1")
 	int lockUser(String email);
-	
-	
-	
-	
+
 }

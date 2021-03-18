@@ -47,18 +47,20 @@ public class JobPost {
 	@Column(name = "job_post_date")
 	private Date jobPostDate;
 
-	@ManyToOne
-	@JoinColumn(name = "user_id",foreignKey = @ForeignKey(name="user_id_FK"))
-	private Users user;
-
-	@ManyToMany(mappedBy = "jobPostsApplication")
-	private List<Users> usersApplication;
-
 	@Column(name = "job_post_type")
 	private String jobPostType;
+
 	
-	//inverse references
-		@OneToMany(mappedBy = "jobPost")
-		List<Application> applicationStatus;
+	@ManyToOne
+	@JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "user_id_FK"))
+	private User user;
+
+	
+//	@ManyToMany(mappedBy = "jobPostsApplication")
+//	private List<User> usersApplication;
+
+	// inverse references
+	@OneToMany(mappedBy = "jobPost")
+	List<Application> applicationStatus;
 
 }

@@ -1,16 +1,8 @@
 package al.ikubinfo.internship.freelancer.model;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@EqualsAndHashCode
-@ToString
+@Data
 public class LoginRequest {
 
 	private String email;

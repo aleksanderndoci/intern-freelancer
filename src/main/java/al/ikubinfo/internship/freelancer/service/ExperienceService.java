@@ -9,12 +9,11 @@ public interface ExperienceService {
 
 	ExperienceModel addOrUpdate(ExperienceModel experienceModel);
 
-	List<Experience> addExperiences(List<Experience> experiences);
-
+	List<ExperienceModel> addExperiences(List<ExperienceModel> experienceModelList);
+	
 	String deleteExperience(int id);
 	
-	List<Experience> getExperiencesByUserId(int id);
-	
+	List<ExperienceModel> getExperiencesByUserId(int id);
 	
 
 }

@@ -1,6 +1,6 @@
 package al.ikubinfo.internship.freelancer.mapper.impl;
 
-import al.ikubinfo.internship.freelancer.entity.Users;
+import al.ikubinfo.internship.freelancer.entity.User;
 import al.ikubinfo.internship.freelancer.mapper.Mapper;
 import al.ikubinfo.internship.freelancer.model.TestModel;
 import al.ikubinfo.internship.freelancer.model.UserModel;
@@ -8,11 +8,11 @@ import al.ikubinfo.internship.freelancer.model.UserModel;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserMapperImpl implements Mapper<Users, UserModel> {
+public class UserMapperImpl implements Mapper<User, UserModel> {
 
 	@Override
-	public Users toEntity(UserModel model) {
-		Users userEntity = new Users();
+	public User toEntity(UserModel model) {
+		User userEntity = new User();
 		userEntity.setName(model.getName());
 		userEntity.setSurname(model.getSurname());
 		userEntity.setEmail(model.getEmail());
@@ -21,17 +21,16 @@ public class UserMapperImpl implements Mapper<Users, UserModel> {
 		userEntity.setBirthday(model.getBirthday());
 		userEntity.setActivationStatus(model.getActivationStatus());
 		userEntity.setRole(model.getRole());
-		userEntity.setSkills(model.getSkills());
-		userEntity.setExperiences(model.getExperiences());
-		userEntity.setEducation(model.getEducation());
-		userEntity.setJobPosts(model.getJobPosts());
+//		userEntity.setExperiences(model.getExperiences());
+//		userEntity.setEducation(model.getEducation());
+//		userEntity.setJobPosts(model.getJobPosts());
 		userEntity.setJobPostsApplication(model.getJobPostApplications());
 		return userEntity;
 	}
 
 //
 	@Override
-	public UserModel toModel(Users entity) {
+	public UserModel toModel(User entity) {
 		UserModel userModel = new UserModel();
 		userModel.setName(entity.getName());
 		userModel.setSurname(entity.getSurname());
@@ -41,10 +40,9 @@ public class UserMapperImpl implements Mapper<Users, UserModel> {
 		userModel.setBirthday(entity.getBirthday());
 		userModel.setActivationStatus(entity.getActivationStatus());
 		userModel.setRole(entity.getRole());
-		userModel.setSkills(entity.getSkills());
-		userModel.setExperiences(entity.getExperiences());
-		userModel.setEducation(entity.getEducation());
-		userModel.setJobPosts(entity.getJobPosts());
+       // userModel.setExperiences(entity.getExperiences());
+//		userModel.setEducation(entity.getEducation());
+//		userModel.setJobPosts(entity.getJobPosts());
 		userModel.setJobPostApplications(entity.getJobPostsApplication());
 
 		return userModel;

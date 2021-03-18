@@ -10,7 +10,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -31,28 +30,19 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-
 @Getter
 @Setter
-@EqualsAndHashCode 
+@EqualsAndHashCode
 @NoArgsConstructor
 @Entity
 @ToString
-@Table(name = "users",
-uniqueConstraints = {
-		@UniqueConstraint(name="user_email_unique",columnNames = "email")
-		
-}
-)
-public class Users implements UserDetails {
-	
-	/**
-	 * 
-	 */
+@Table(name = "users", uniqueConstraints = { @UniqueConstraint(name = "user_email_unique", columnNames = "email") })
+public class User implements UserDetails {
+
 	private static final long serialVersionUID = 1L;
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
 	@Column(name = "name")
@@ -79,58 +69,47 @@ public class Users implements UserDetails {
 	@Enumerated(value = EnumType.STRING)
 	@Column(name = "role")
 	private Role role;
-	
-	
-	@Column(name="locked")
-	private Boolean locked =false;
-	
-	@Column(name="enabled")
-	private Boolean enabled =false;
+
+	@Column(name = "locked")
+	private Boolean locked = false;
+
+	@Column(name = "enabled")
+	private Boolean enabled = false;
+
+//
+//	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+//	private List<Experience> experiences;
+
+//	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+//	private List<Education> education;
+//
+//	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+//	private List<JobPost> jobPosts;
 
 	@ManyToMany
-	@JoinTable(name = "user_skill", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "skill_name"))
-	private List<Skill> skills;
-
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-	private List<Experience> experiences;
-
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-	private List<Education> education;
-
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-	private List<JobPost> jobPosts;
-
-	@ManyToMany
-	@JoinTable(name = "application", joinColumns = @JoinColumn(name = "job_post_id"),
-			 inverseJoinColumns = @JoinColumn(name = "user_id"))
+	@JoinTable(name = "application", joinColumns = @JoinColumn(name = "job_post_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
 	private List<JobPost> jobPostsApplication;
-	
-	//inverse references
+
+	// inverse references
 	@OneToMany(mappedBy = "user")
 	List<Application> applicationStatus;
 
-	
-
-	public Users(String name, String surname, String email, String passw, Role role
-//			, Date birthday, String country,
-//			String activationStatus
-			) 
-			{
+	public User(String name, String surname, String email, String passw, Role role) {
 		super();
 		this.name = name;
 		this.surname = surname;
 		this.email = email;
 		this.password = passw;
-		this.role=role;
-//		this.birthday = birthday;
-//		this.country = country;
-//		this.activationStatus=activationStatus;
-//	
+		this.role = role;
+
 	}
-	
-	
-	
-	
+
+	public User(String email, String password) {
+		super();
+		this.email = email;
+		this.password = password;
+	}
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role.name());
@@ -168,16 +147,5 @@ public class Users implements UserDetails {
 	public boolean isEnabled() {
 		return enabled;
 	}
-
-
-
-
-	public Users(String email, String password) {
-		super();
-		this.email = email;
-		this.password = password;
-	}
-
-
 
 }

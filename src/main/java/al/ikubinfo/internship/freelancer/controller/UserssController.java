@@ -8,7 +8,7 @@ package al.ikubinfo.internship.freelancer.controller;
 //import org.springframework.web.bind.annotation.PostMapping;
 //import org.springframework.web.bind.annotation.RequestMapping;
 //import org.springframework.web.bind.annotation.RestController;
-//import al.ikubinfo.internship.freelancer.entity.Users;
+//import al.ikubinfo.internship.freelancer.entity.User;
 //import al.ikubinfo.internship.freelancer.model.UserModel;
 //import al.ikubinfo.internship.freelancer.service.UserService;
 //import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -28,8 +28,8 @@ package al.ikubinfo.internship.freelancer.controller;
 //	}
 //
 //	@GetMapping("/getAll")
-//	public List<Users> getAllUsers() {
-//		List<Users> users = userService.getAllUsers();
+//	public List<User> getAllUsers() {
+//		List<User> users = userService.getAllUsers();
 //		return users;
 //	}
 //
