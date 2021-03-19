@@ -1,15 +1,13 @@
 package al.ikubinfo.internship.freelancer.entity;
 
- 
+public enum Role {
 
-public enum Role{
-    
-	ADMIN("ADMIN"), EMPLOYER("EMPLOYER"), FREELANCER("FREELANCE");
-	
-    
+	ADMIN("ADMIN"), 
+	EMPLOYER("EMPLOYER"), 
+	FREELANCER("FREELANCE");
+
 	private String role;
 
-	
 	Role(String role) {
 		this.role = role;
 	}

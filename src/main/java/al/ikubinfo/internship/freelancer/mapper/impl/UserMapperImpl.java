@@ -2,9 +2,7 @@ package al.ikubinfo.internship.freelancer.mapper.impl;
 
 import al.ikubinfo.internship.freelancer.entity.User;
 import al.ikubinfo.internship.freelancer.mapper.Mapper;
-import al.ikubinfo.internship.freelancer.model.TestModel;
 import al.ikubinfo.internship.freelancer.model.UserModel;
-
 import org.springframework.stereotype.Component;
 
 @Component

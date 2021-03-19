@@ -1,16 +1,20 @@
 package al.ikubinfo.internship.freelancer.mapper.impl;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import al.ikubinfo.internship.freelancer.entity.Experience;
+import al.ikubinfo.internship.freelancer.entity.User;
 import al.ikubinfo.internship.freelancer.mapper.Mapper;
 import al.ikubinfo.internship.freelancer.model.ExperienceModel;
+import al.ikubinfo.internship.freelancer.model.UserModel;
 
 @Component
 public class ExperienceMapperImpl implements Mapper<Experience, ExperienceModel> {
 
+	@Autowired
+	private Mapper<User, UserModel> userMapper;
+
 	@Override
-	// TODO there should be no entities inside models. Replace User with UserModel. @Autowire UserMapper to do the mapping
 	public Experience toEntity(ExperienceModel model) {
 		Experience experience = new Experience();
 		experience.setId(model.getId());
@@ -19,7 +23,9 @@ public class ExperienceMapperImpl implements Mapper<Experience, ExperienceModel>
 		experience.setPositionDescription(model.getPositionDescription());
 		experience.setStartDate(model.getStartDate());
 		experience.setEndDate(model.getEndDate());
-		experience.setUser(model.getUser());
+
+		User user = userMapper.toEntity(model.getUserModel());
+		experience.setUser(user);
 
 		return experience;
 	}
@@ -34,7 +40,10 @@ public class ExperienceMapperImpl implements Mapper<Experience, ExperienceModel>
 		experienceModel.setPositionDescription(entity.getPositionDescription());
 		experienceModel.setStartDate(entity.getStartDate());
 		experienceModel.setEndDate(entity.getEndDate());
-		experienceModel.setUser(entity.getUser());
+
+		UserModel userModel = userMapper.toModel(entity.getUser());
+		experienceModel.setUserModel(userModel);
+
 		return experienceModel;
 	}
 

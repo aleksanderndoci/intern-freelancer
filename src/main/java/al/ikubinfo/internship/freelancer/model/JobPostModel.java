@@ -21,5 +21,5 @@ public class JobPostModel {
 
 	private String jobPostType;
 
-	private User user;
+	private UserModel userModel;
 }

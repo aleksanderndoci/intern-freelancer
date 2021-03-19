@@ -3,6 +3,7 @@ package al.ikubinfo.internship.freelancer.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,15 +64,13 @@ public class ExperienceServiceImple implements ExperienceService {
 	}
 
 	@Override
-	// TODO return objects(that will be converted to JSON) instead of literals
-	public String deleteExperience(int id) {
+	public HttpStatus deleteExperience(int id) {
 		Experience experience = repository.getOne(id);
 		if(experience==null) {
 			throw new ResourceNotFoundException("enter a valid experience id");
 		}
 		repository.delete(experience);
-		return String.format("Experience with %d , position %s at company %s IS DELETED", id, experience.getPosition(),
-				experience.getNameOfCompany());
+		return HttpStatus.NO_CONTENT;
 
 	}
 
