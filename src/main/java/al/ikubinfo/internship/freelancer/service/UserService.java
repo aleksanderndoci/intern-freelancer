@@ -120,6 +120,7 @@ public class UserService implements UserDetailsService {
 		return "confirmed";
 	}
 
+	// TODO: looks very ugly, try to move it to a dedicated file or at least a dedicated class as a constant
 	private String buildEmail(String name, String link) {
 		return "<div style=\"font-family:Helvetica,Arial,sans-serif;font-size:16px;margin:0;color:#0b0c0c\">\n" + "\n"
 				+ "<span style=\"display:none;font-size:1px;color:#fff;max-height:0\"></span>\n" + "\n"
@@ -157,6 +158,7 @@ public class UserService implements UserDetailsService {
 				+ "  </tbody></table><div class=\"yj6qo\"></div><div class=\"adL\">\n" + "\n" + "</div></div>";
 	}
 
+	// TODO: what if user doesnt exist?
 	public LoginRequest login(LoginRequest loginRequest) {
 		User user = loginMapper.toEntity(loginRequest);
 		boolean userExists = userRepository.validUser(user.getEmail(), user.getPassword());

@@ -17,6 +17,7 @@ public class LoginRequestMapperImpl implements Mapper<User, LoginRequest> {
 	}
 
 	@Override
+	//TODO refactor this. Returning null why?
 	public LoginRequest toModel(User entity) {
 
 		LoginRequest loginRequest = new LoginRequest();

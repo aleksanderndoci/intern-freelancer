@@ -1,4 +1,5 @@
 package al.ikubinfo.internship.freelancer.controller;
+// TODO remove unused code/classes
 //package al.ikubinfo.internship.freelancer.controller;
 //
 //import java.util.List;

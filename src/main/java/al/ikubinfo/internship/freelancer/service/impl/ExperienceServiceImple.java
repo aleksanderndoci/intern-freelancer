@@ -63,6 +63,7 @@ public class ExperienceServiceImple implements ExperienceService {
 	}
 
 	@Override
+	// TODO return objects(that will be converted to JSON) instead of literals
 	public String deleteExperience(int id) {
 		Experience experience = repository.getOne(id);
 		if(experience==null) {

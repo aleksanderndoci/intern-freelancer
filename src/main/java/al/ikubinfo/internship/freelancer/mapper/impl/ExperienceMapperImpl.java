@@ -10,6 +10,7 @@ import al.ikubinfo.internship.freelancer.model.ExperienceModel;
 public class ExperienceMapperImpl implements Mapper<Experience, ExperienceModel> {
 
 	@Override
+	// TODO there should be no entities inside models. Replace User with UserModel. @Autowire UserMapper to do the mapping
 	public Experience toEntity(ExperienceModel model) {
 		Experience experience = new Experience();
 		experience.setId(model.getId());

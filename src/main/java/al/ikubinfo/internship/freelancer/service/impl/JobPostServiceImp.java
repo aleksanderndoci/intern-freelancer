@@ -33,6 +33,7 @@ public class JobPostServiceImp implements JobPostService {
 	}
 
 	@Override
+	// TODO: This will never work. You are accessing role.FREELANCER.name() instead of role.name(). You are mixing static with non static
 	public JobPostModel addJobPost(JobPostModel jobPostModel) {
 		JobPost jobPostEntity = mapper.toEntity(jobPostModel);
 		jobPostRepository.save(jobPostEntity);
@@ -49,6 +50,7 @@ public class JobPostServiceImp implements JobPostService {
 	}
 
 	@Override
+	// TODO: for code readibility add an explicit call to jobPostrepository.save() method
 	public JobPostModel updateJobPost(Integer id, JobPostModel jobPostModel) {
 		JobPost entity = mapper.toEntity(jobPostModel);
 		
@@ -63,7 +65,7 @@ public class JobPostServiceImp implements JobPostService {
 		entity.setWorkingHour(jobPostById.getWorkingHour());
 		entity.setJobPostDate(jobPostById.getJobPostDate());
 		entity.setJobPostType(jobPostById.getJobPostType());
-		
+
 		return mapper.toModel(entity);
 	}
 

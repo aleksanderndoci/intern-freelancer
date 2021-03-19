@@ -31,8 +31,8 @@ import al.ikubinfo.internship.freelancer.service.UserService;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
-@RequestMapping(path = "user")
-
+@RequestMapping(path = "experience")
+// TODO refactor this controller. Controller scope should be unique (in this case only for 'User' operations)
 public class UserController {
 
 	@Autowired
@@ -44,6 +44,7 @@ public class UserController {
 	@Autowired
 	private JobPostService jobPostService;
 
+	// TODO refactor this api: controllers should be clean and not have logic / exception managment inside
 	@PostMapping(path = "registration", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public RegistrationRequest register(@RequestBody RegistrationRequest request) {
 		try {

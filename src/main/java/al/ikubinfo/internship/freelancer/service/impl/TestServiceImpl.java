@@ -15,6 +15,7 @@ import javax.persistence.EntityNotFoundException;
 @Service
 @Transactional
 @Slf4j
+// TODO: get rid of this. You dont need it anymore
 public class TestServiceImpl implements TestService {
 //    @Autowired
 //    private final UserRepository testRepository;

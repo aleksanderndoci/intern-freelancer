@@ -55,7 +55,8 @@ public class JobPost {
 	@JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "user_id_FK"))
 	private User user;
 
-	
+
+	// TODO remove commented code EVERYWHERE!
 //	@ManyToMany(mappedBy = "jobPostsApplication")
 //	private List<User> usersApplication;
 
