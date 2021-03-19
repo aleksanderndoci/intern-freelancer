@@ -2,6 +2,8 @@ package al.ikubinfo.internship.freelancer.service;
 
 import al.ikubinfo.internship.freelancer.entity.ConfirmationToken;
 import al.ikubinfo.internship.freelancer.entity.User;
+
+import al.ikubinfo.internship.freelancer.exception.ResourceNotFoundException;
 import al.ikubinfo.internship.freelancer.mapper.Mapper;
 import al.ikubinfo.internship.freelancer.model.LoginRequest;
 import al.ikubinfo.internship.freelancer.model.RegistrationRequest;
@@ -54,9 +56,11 @@ public class UserService implements UserDetailsService {
 	}
 
 	public String register(RegistrationRequest request) {
+	
 		boolean validEmail = emailValidator.test(request.getEmail());
 		if (!validEmail) {
-			throw new IllegalStateException("Email not valid!");
+			throw new ResourceNotFoundException("EMAIL IS UNVALID!");
+
 		}
 		String token = signUpUser(new User(request.getName(), request.getSurname(), request.getEmail(),
 				request.getPassword(), request.getRole()));
@@ -72,7 +76,7 @@ public class UserService implements UserDetailsService {
 	public String signUpUser(User user) {
 		boolean userExists = userRepository.findByEmail(user.getEmail()).isPresent();
 		if (userExists) {
-			throw new IllegalStateException("Email is taken!");
+			throw new ResourceNotFoundException("Email is taken!");
 		}
 		String passEncoded = passwordEncoder.encode(user.getPassword());
 
@@ -159,24 +163,21 @@ public class UserService implements UserDetailsService {
 
 		if (userExists) {
 			boolean isLocked = userRepository.checkIfLocked(user.getEmail());
-			if(isLocked==false) {
+			if (isLocked == false) {
 				userRepository.lockUser(user.getEmail());
 				return loginMapper.toModel(user);
-			 }else {
+			} else {
 				return loginMapper.toModel(user);
-			 }
+			}
 		}
 		return null;
 
 	}
 
 	public UserModel getUserById(Integer id) {
-		User user = userRepository.getOne(id);
+		User user = userRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("User not found!"));
 		return userMapper.toModel(user);
 
 	}
 
-	public User findUserEById(Integer id) {
-		return userRepository.getOne(id);
-	}
 }

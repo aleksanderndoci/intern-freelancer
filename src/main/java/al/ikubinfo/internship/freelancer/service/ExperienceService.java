@@ -7,7 +7,7 @@ import al.ikubinfo.internship.freelancer.model.ExperienceModel;
 
 public interface ExperienceService {
 
-	ExperienceModel addOrUpdate(ExperienceModel experienceModel);
+	ExperienceModel updateExperience(Integer id,ExperienceModel experienceModel);
 
 	List<ExperienceModel> addExperiences(List<ExperienceModel> experienceModelList);
 	
@@ -15,5 +15,6 @@ public interface ExperienceService {
 	
 	List<ExperienceModel> getExperiencesByUserId(int id);
 	
+	ExperienceModel addExperience(ExperienceModel experienceModel);
 
 }

@@ -3,6 +3,7 @@ package al.ikubinfo.internship.freelancer.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
@@ -27,7 +28,7 @@ import al.ikubinfo.internship.freelancer.model.UserModel;
 import al.ikubinfo.internship.freelancer.service.ExperienceService;
 import al.ikubinfo.internship.freelancer.service.JobPostService;
 import al.ikubinfo.internship.freelancer.service.UserService;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping(path = "user")
@@ -39,12 +40,11 @@ public class UserController {
 
 	@Autowired
 	private ExperienceService experienceService;
-	
+
 	@Autowired
 	private JobPostService jobPostService;
 
-	@PostMapping(path = "registration")
-	@ResponseBody
+	@PostMapping(path = "registration", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public RegistrationRequest register(@RequestBody RegistrationRequest request) {
 		try {
 			userService.register(request);
@@ -65,15 +65,21 @@ public class UserController {
 		return userService.login(loginRequest);
 	}
 
-	@PutMapping(path = "addExperience")
-	public ResponseEntity<ExperienceModel> addOrUpdateExperience(@RequestBody ExperienceModel experienceModel) {
-		return ResponseEntity.ok(experienceService.addOrUpdate(experienceModel));
+	@PostMapping(path = "addExperience")
+	public ResponseEntity<ExperienceModel> addExperience(@RequestBody ExperienceModel experienceModel) {
+		return new ResponseEntity<>(experienceService.addExperience(experienceModel), HttpStatus.CREATED);
 	}
 
-	@PostMapping(path="addExperiences")
-	public ResponseEntity<List<ExperienceModel>> addExperiences(@RequestBody List<ExperienceModel> experiencesModelList) {   
-		return ResponseEntity.ok(experienceService.addExperiences(experiencesModelList));
+	@PutMapping(path = "updateExperience/{id}")
+	public ResponseEntity<ExperienceModel> updateExperience(@PathVariable("id") Integer id,
+			@RequestBody ExperienceModel experienceModel) {
+		return new ResponseEntity<>(experienceService.updateExperience(id, experienceModel), HttpStatus.OK);
+	}
 
+	@PostMapping(path = "addExperiences")
+	public ResponseEntity<List<ExperienceModel>> addExperiences(
+			@RequestBody List<ExperienceModel> experiencesModelList) {
+		return new ResponseEntity<>(experienceService.addExperiences(experiencesModelList), HttpStatus.CREATED);
 	}
 
 	@DeleteMapping(path = "deleteExperience/{id}")
@@ -83,17 +89,18 @@ public class UserController {
 
 	@GetMapping(path = "getExperiences/{userId}")
 	public ResponseEntity<List<ExperienceModel>> getExpersByUserId(@PathVariable("userId") int userId) {
+
 		return ResponseEntity.ok(experienceService.getExperiencesByUserId(userId));
 	}
 
 	@GetMapping(path = "/getUserById/{userId}")
-	@ResponseBody
 	public ResponseEntity<UserModel> getUserById(@PathVariable("userId") Integer userId) {
+
 		return ResponseEntity.ok(userService.getUserById(userId));
 	}
-	
-	@PutMapping(path="addJobPost")
-	public ResponseEntity<JobPostModel> addOrUpdateJobPost(@RequestBody JobPostModel jobPostModel){
+
+	@PutMapping(path = "addJobPost")
+	public ResponseEntity<JobPostModel> addOrUpdateJobPost(@RequestBody JobPostModel jobPostModel) {
 		return ResponseEntity.ok(jobPostService.addOrUpdate(jobPostModel));
 	}
 

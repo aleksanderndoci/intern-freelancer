@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import al.ikubinfo.internship.freelancer.entity.JobPost;
 import al.ikubinfo.internship.freelancer.entity.Role;
 import al.ikubinfo.internship.freelancer.entity.User;
+import al.ikubinfo.internship.freelancer.exception.ResourceNotFoundException;
 import al.ikubinfo.internship.freelancer.mapper.Mapper;
 import al.ikubinfo.internship.freelancer.model.JobPostModel;
 import al.ikubinfo.internship.freelancer.repository.JobPostRepository;
@@ -22,9 +23,6 @@ public class JobPostServiceImp implements JobPostService {
 
 	@Autowired
 	private JobPostRepository jobPostRepository;
-	
-	@Autowired
-	private UserService userService;
 
 	private Mapper<JobPost, JobPostModel> mapper;
 
@@ -35,10 +33,9 @@ public class JobPostServiceImp implements JobPostService {
 	}
 
 	@Override
-	public JobPostModel addOrUpdate(JobPostModel jobPostModel) {
+	public JobPostModel addJobPost(JobPostModel jobPostModel) {
 		JobPost jobPostEntity = mapper.toEntity(jobPostModel);
 		jobPostRepository.save(jobPostEntity);
-       // User user = userService.findUserEById(jobPostEntity.getUser().getId());
 		Role role = jobPostEntity.getUser().getRole();
 		if (role.FREELANCER.name().equals("FREELANCER")) {
 			jobPostEntity.setJobPostType("JOB DEMAND");
@@ -49,6 +46,25 @@ public class JobPostServiceImp implements JobPostService {
 		}
 
 		return mapper.toModel(jobPostEntity);
+	}
+
+	@Override
+	public JobPostModel updateJobPost(Integer id, JobPostModel jobPostModel) {
+		JobPost entity = mapper.toEntity(jobPostModel);
+		
+		JobPost jobPostById= jobPostRepository.findById(id).
+				orElseThrow(()-> new ResourceNotFoundException("Not found job post with id"+id));
+	     
+		entity.setId(jobPostById.getId());
+		entity.setPosition(jobPostById.getPosition());
+		entity.setPositionDescription(jobPostById.getPositionDescription());
+		entity.setSalary(jobPostById.getSalary());
+		entity.setUser(jobPostById.getUser());
+		entity.setWorkingHour(jobPostById.getWorkingHour());
+		entity.setJobPostDate(jobPostById.getJobPostDate());
+		entity.setJobPostType(jobPostById.getJobPostType());
+		
+		return mapper.toModel(entity);
 	}
 
 }

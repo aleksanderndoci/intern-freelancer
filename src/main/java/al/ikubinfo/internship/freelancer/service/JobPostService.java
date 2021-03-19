@@ -4,5 +4,7 @@ import al.ikubinfo.internship.freelancer.model.JobPostModel;
 
 public interface JobPostService {
 
-	JobPostModel addOrUpdate(JobPostModel jobPostModel);
+	JobPostModel addJobPost(JobPostModel jobPostModel);
+	
+	JobPostModel updateJobPost(Integer id, JobPostModel jobPostModel);
 }
