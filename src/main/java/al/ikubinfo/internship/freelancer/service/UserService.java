@@ -121,8 +121,14 @@ public class UserService implements UserDetailsService {
 	}
 
 	public UserModel getUserById(Integer id) {
-		User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found!"));
-		return userMapper.toModel(user);
+		try {
+			User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found!"));
+			return userMapper.toModel(user);
+		} catch (ResourceNotFoundException e) {
+			log.error(e.getMessage());
+			throw new AccessDeniedException(e.getMessage());
+		}
+		
 
 	}
 	

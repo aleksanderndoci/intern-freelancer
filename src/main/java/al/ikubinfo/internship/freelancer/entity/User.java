@@ -5,6 +5,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Collections;
@@ -39,15 +42,6 @@ public class User implements UserDetails {
 	@Column(name = "password")
 	private String password;
 
-	@Column(name = "birthday")
-	private Date birthday;
-
-	@Column(name = "country")
-	private String country;
-
-	@Column(name = "activation_status")
-	private String activationStatus;
-
 	@Enumerated(value = EnumType.STRING)
 	@Column(name = "role")
 	private Role role;
@@ -58,23 +52,16 @@ public class User implements UserDetails {
 	@Column(name = "enabled")
 	private Boolean enabled = false;
 
-//
 //	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 //	private List<Experience> experiences;
+	
+//	@ManyToMany
+//	@JoinTable(name = "application", joinColumns = @JoinColumn(name = "job_post_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+//	private List<JobPost> jobPostsApplication;
 
-//	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-//	private List<Education> education;
-//
-//	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-//	private List<JobPost> jobPosts;
-
-	@ManyToMany
-	@JoinTable(name = "application", joinColumns = @JoinColumn(name = "job_post_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
-	private List<JobPost> jobPostsApplication;
-
-	// inverse references
-	@OneToMany(mappedBy = "user")
-	List<Application> applicationStatus;
+//	// inverse references
+//	@OneToMany(mappedBy = "user")
+//	List<Application> applicationStatus;
 
 	public User(String name, String surname, String email, String passw, Role role) {
 		super();
@@ -91,6 +78,7 @@ public class User implements UserDetails {
 		this.email = email;
 		this.password = password;
 	}
+	
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -129,5 +117,6 @@ public class User implements UserDetails {
 	public boolean isEnabled() {
 		return enabled;
 	}
+
 
 }

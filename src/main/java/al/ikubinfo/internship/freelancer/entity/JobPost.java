@@ -1,5 +1,7 @@
 package al.ikubinfo.internship.freelancer.entity;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
@@ -16,16 +18,18 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Setter
 @Getter
-@NoArgsConstructor
 @Entity
 @Table(name = "job_post")
 public class JobPost {
+	//LocalDateTime dateTime = LocalDateTime.now();
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,7 +38,6 @@ public class JobPost {
 	@Column(name = "position")
 	private String position;
 
-	@Lob
 	@Column(name = "position_description")
 	private String positionDescription;
 
@@ -44,24 +47,25 @@ public class JobPost {
 	@Column(name = "working_hour")
 	private String workingHour;
 
-	@Column(name = "job_post_date")
-	private Date jobPostDate;
+	
+	@Column(name = "post_date")
+	private Date postDate ;
+
+	@Column(name = "update_date")
+	private Date updateDate;
 
 	@Column(name = "job_post_type")
 	private String jobPostType;
 
-	
 	@ManyToOne
 	@JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "user_id_FK"))
 	private User user;
 
-
-	// TODO remove commented code EVERYWHERE!
 //	@ManyToMany(mappedBy = "jobPostsApplication")
 //	private List<User> usersApplication;
-
-	// inverse references
-	@OneToMany(mappedBy = "jobPost")
-	List<Application> applicationStatus;
+//
+//	// inverse references
+//	@OneToMany(mappedBy = "jobPost")
+//	List<Application> applicationStatus;
 
 }

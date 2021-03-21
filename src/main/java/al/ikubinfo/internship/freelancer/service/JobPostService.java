@@ -6,5 +6,5 @@ public interface JobPostService {
 
 	JobPostModel addJobPost(JobPostModel jobPostModel);
 	
-	JobPostModel updateJobPost(Integer id, JobPostModel jobPostModel);
+	JobPostModel updateJobPost(JobPostModel jobPostModel);
 }

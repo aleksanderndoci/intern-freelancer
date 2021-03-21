@@ -16,19 +16,16 @@ public class JobPostMapperImpl implements Mapper<JobPost, JobPostModel> {
 
 	@Override
 	public JobPost toEntity(JobPostModel model) {
-
 		JobPost jobPost = new JobPost();
 		jobPost.setId(model.getId());
 		jobPost.setPosition(model.getPosition());
 		jobPost.setPositionDescription(model.getPositionDescription());
 		jobPost.setSalary(model.getSalary());
 		jobPost.setWorkingHour(model.getWorkingHour());
-		jobPost.setJobPostDate(model.getJobPostDate());
+		jobPost.setPostDate(model.getPostDate());
+		jobPost.setUpdateDate(model.getUpdateDate());
 		jobPost.setJobPostType(model.getJobPostType());
-		
-		User user = userMapper.toEntity(model.getUserModel());
-		jobPost.setUser(user);
-		
+		jobPost.setUser(userMapper.toEntity(model.getUserModel()));
 		return jobPost;
 	}
 
@@ -40,11 +37,10 @@ public class JobPostMapperImpl implements Mapper<JobPost, JobPostModel> {
 		model.setPositionDescription(entity.getPositionDescription());
 		model.setSalary(entity.getSalary());
 		model.setWorkingHour(entity.getWorkingHour());
-		model.setJobPostDate(entity.getJobPostDate());
+		model.setPostDate(entity.getPostDate());
+		model.setUpdateDate(entity.getUpdateDate());
 		model.setJobPostType(entity.getJobPostType());
-		
-		UserModel userModel = userMapper.toModel(entity.getUser());
-		model.setUserModel(userModel);
+		model.setUserModel(userMapper.toModel(entity.getUser()));
 		return model;
 	}
 

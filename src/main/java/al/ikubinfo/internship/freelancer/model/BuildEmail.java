@@ -1,5 +1,8 @@
 package al.ikubinfo.internship.freelancer.model;
 
+import lombok.Data;
+
+@Data
 public class BuildEmail {
 	private static String name;
 	private static String link;

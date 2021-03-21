@@ -33,7 +33,7 @@ public class UserController {
 		return userService.confirmToken(token);
 	}
 
-	@GetMapping(path = "/getUserById/{userId}")
+	@GetMapping(path = "getUserById/{userId}")
 	public ResponseEntity<UserModel> getUserById(@PathVariable("userId") Integer userId) {
 
 		return ResponseEntity.ok(userService.getUserById(userId));

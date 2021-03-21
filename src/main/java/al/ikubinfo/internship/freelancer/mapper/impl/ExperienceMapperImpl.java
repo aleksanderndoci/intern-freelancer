@@ -1,4 +1,5 @@
 package al.ikubinfo.internship.freelancer.mapper.impl;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -23,16 +24,12 @@ public class ExperienceMapperImpl implements Mapper<Experience, ExperienceModel>
 		experience.setPositionDescription(model.getPositionDescription());
 		experience.setStartDate(model.getStartDate());
 		experience.setEndDate(model.getEndDate());
-
-		User user = userMapper.toEntity(model.getUserModel());
-		experience.setUser(user);
-
+		experience.setUser(userMapper.toEntity(model.getUserModel()));
 		return experience;
 	}
 
 	@Override
 	public ExperienceModel toModel(Experience entity) {
-
 		ExperienceModel experienceModel = new ExperienceModel();
 		experienceModel.setId(entity.getId());
 		experienceModel.setNameOfCompany(entity.getNameOfCompany());
@@ -40,11 +37,7 @@ public class ExperienceMapperImpl implements Mapper<Experience, ExperienceModel>
 		experienceModel.setPositionDescription(entity.getPositionDescription());
 		experienceModel.setStartDate(entity.getStartDate());
 		experienceModel.setEndDate(entity.getEndDate());
-
-		UserModel userModel = userMapper.toModel(entity.getUser());
-		experienceModel.setUserModel(userModel);
-
+		experienceModel.setUserModel(userMapper.toModel(entity.getUser()));
 		return experienceModel;
 	}
-
 }

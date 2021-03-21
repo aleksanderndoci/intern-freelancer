@@ -7,27 +7,27 @@ import javax.persistence.Embeddable;
 
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 @Embeddable
-@Setter
-@Getter
-@EqualsAndHashCode
+@Data
 @AllArgsConstructor
-
 public class ApplicationKey implements Serializable{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	@Column(name="job_post_id")
-	Integer jobPostId;
+	private Integer jobPostId;
 	
 	@Column(name="user_id")
-	Integer userId;
+	private Integer userId;
+
+	public ApplicationKey() {
+		super();
+	}
+	
 	
 }

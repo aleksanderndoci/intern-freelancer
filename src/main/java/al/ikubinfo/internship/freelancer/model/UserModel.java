@@ -9,22 +9,9 @@ import lombok.Data;
 
 @Data
 public class UserModel {
-
+	private Integer id;
 	private String name;
 	private String surname;
-	private String fullName;
 	private String email;
-	private String password;
-	private String country;
-	private Date birthday;
-	private String activationStatus;
 	private Role role;
-	private List<Experience> experiences;
-	private List<JobPost> jobPosts;
-	private List<JobPost> jobPostApplications;
-
-	public UserModel() {
-		super();
-	}
-
 }
