@@ -2,13 +2,12 @@ package al.ikubinfo.internship.freelancer.service.impl;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
-
 import al.ikubinfo.internship.freelancer.entity.JobPost;
 import al.ikubinfo.internship.freelancer.entity.Role;
 import al.ikubinfo.internship.freelancer.entity.User;
@@ -18,10 +17,12 @@ import al.ikubinfo.internship.freelancer.model.JobPostModel;
 import al.ikubinfo.internship.freelancer.repository.JobPostRepository;
 import al.ikubinfo.internship.freelancer.repository.UserRepository;
 import al.ikubinfo.internship.freelancer.service.JobPostService;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Transactional
+@AllArgsConstructor
 @Slf4j
 public class JobPostServiceImp implements JobPostService {
 
@@ -31,13 +32,9 @@ public class JobPostServiceImp implements JobPostService {
 	@Autowired
 	private UserRepository userRepository;
 
+	@Autowired
 	private Mapper<JobPost, JobPostModel> jobPostmapper;
 
-	public JobPostServiceImp(JobPostRepository jobPostRepository, Mapper<JobPost, JobPostModel> mapper) {
-		super();
-		this.jobPostRepository = jobPostRepository;
-		this.jobPostmapper = mapper;
-	}
 
 	@Override
 	public JobPostModel addJobPost(JobPostModel jobPostModel) {
@@ -50,7 +47,6 @@ public class JobPostServiceImp implements JobPostService {
 			}
 			if (Role.EMPLOYER.equals(user.getRole())) {
 				jobPostEntity.setJobPostType("JOB OFFER");
-
 			}
 			jobPostEntity.setUser(user);
 			jobPostEntity
@@ -75,8 +71,7 @@ public class JobPostServiceImp implements JobPostService {
 			entity.setUpdateDate(java.util.Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
             entity.setPostDate(jobPostById.getPostDate());
             entity.setJobPostType(jobPostById.getJobPostType());
-            //entity.setUser(jobPostById.getUser());
-            // It doesn't work.. necessary to add in postman 
+            entity.setUser(jobPostById.getUser());
             entity.setPosition(jobPostModel.getPosition());
             entity.setPositionDescription(jobPostModel.getPositionDescription());
             entity.setSalary(jobPostModel.getSalary());
@@ -88,10 +83,48 @@ public class JobPostServiceImp implements JobPostService {
 			log.error(e.getMessage());
 			throw new AccessDeniedException(e.getMessage());
 		}
+		}
+	@Override
+	public List<JobPostModel> listJobPostsByUserId(int userId) {
+		try {
+			List<JobPost> jobPostsEntityList = jobPostRepository.findByUserId(userId);
+			if (jobPostsEntityList.isEmpty()) {
+				throw new ResourceNotFoundException("Write a valid id");
+			}
+			return jobPostmapper.toModelList(jobPostsEntityList);
+		} catch (ResourceNotFoundException e) {
+			log.error(e.getMessage());
+			throw new AccessDeniedException(e.getMessage());
+		}
+	}
+	
 
+	@Override
+	public HttpStatus deleteJobPost(Integer id) {
+		try {
+			JobPost jobPost = jobPostRepository.findById(id).
+					orElseThrow(()->new ResourceNotFoundException("enter a valid experience id"));	
+			jobPostRepository.delete(jobPost);
+			return HttpStatus.NO_CONTENT;
+		} catch (ResourceNotFoundException e) {
+			log.error(e.getMessage());
+			throw new AccessDeniedException(e.getMessage());
+		}
 	}
 
-	//why time has 1 hour diff compared to actual one in LocalDateTime.now
-	// in IDE for Java developer it's okay
-	//should i change data type in postgres
+
+	@Override
+	public List<JobPostModel> findByPosition(String type,String position) {
+		try {
+			
+			List<JobPost> jobPostEntityList = jobPostRepository.findByJobPostTypeAndPosition(type,"%"+position+"%");
+			if(jobPostEntityList.isEmpty()) {
+				throw new ResourceNotFoundException(String.format("No job post with position %s", position));
+				}
+			return jobPostmapper.toModelList(jobPostEntityList);
+		} catch (ResourceNotFoundException e) {
+			log.error(e.getMessage());
+			throw new AccessDeniedException(e.getMessage());
+		}
+	}
 }

@@ -31,15 +31,9 @@ public class ExperienceController {
 	public ResponseEntity<ExperienceModel> updateExperience(@RequestBody ExperienceModel experienceModel) {
 		return new ResponseEntity<>(experienceService.updateExperience(experienceModel), HttpStatus.OK);
 	}
-
-	@PostMapping(path = "addExperiences")
-	public ResponseEntity<List<ExperienceModel>> addExperiences(
-			@RequestBody List<ExperienceModel> experiencesModelList) {
-		return new ResponseEntity<>(experienceService.addExperiences(experiencesModelList), HttpStatus.CREATED);
-	}
-
+	
 	@DeleteMapping(path = "deleteExperience/{id}")
-	public ResponseEntity<HttpStatus> deleteExperience(@PathVariable("id") int id) {
+	public ResponseEntity<HttpStatus> deleteExperience(@PathVariable("id") Integer id) {
 		experienceService.deleteExperience(id);
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}

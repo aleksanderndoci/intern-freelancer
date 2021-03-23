@@ -55,9 +55,12 @@ public class User implements UserDetails {
 //	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 //	private List<Experience> experiences;
 	
-//	@ManyToMany
-//	@JoinTable(name = "application", joinColumns = @JoinColumn(name = "job_post_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
-//	private List<JobPost> jobPostsApplication;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user",targetEntity = JobPost.class)
+	private List<JobPost> jobPosts;
+	
+	@ManyToMany
+	@JoinTable(name = "application", joinColumns = @JoinColumn(name = "job_post_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+	private List<JobPost> jobPostsApplication;
 
 //	// inverse references
 //	@OneToMany(mappedBy = "user")

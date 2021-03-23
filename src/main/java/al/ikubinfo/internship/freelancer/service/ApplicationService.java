@@ -7,4 +7,7 @@ public interface ApplicationService {
 
 	ApplicationModel apply(ApplicationKey primaryKey);
 	ApplicationModel getApplicationByPK(ApplicationKey key);
+	ApplicationModel accept(ApplicationKey key);
+	ApplicationModel refuse(ApplicationKey key);
+
 }

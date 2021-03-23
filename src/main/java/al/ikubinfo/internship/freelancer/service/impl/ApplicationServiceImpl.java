@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Transactional
 @Slf4j
-public class ApplicationServiceImpl implements ApplicationService { // Application Model returned - null? works with application entity
+public class ApplicationServiceImpl implements ApplicationService {
 
 	@Autowired
 	private JobPostRepository jobPostRepository;
@@ -34,6 +34,7 @@ public class ApplicationServiceImpl implements ApplicationService { // Applicati
 	@Autowired
 	private ApplicationRepository applicationRepository;
 
+	@Autowired
 	private Mapper<Application, ApplicationModel> applicationMapper;
 
 	@Override
@@ -51,6 +52,7 @@ public class ApplicationServiceImpl implements ApplicationService { // Applicati
 			if(applicationRepository.findById(primaryKey).isPresent()) {
 				 new ResourceNotFoundException("You have already applied once!");
 			}
+			
 			//else{} null id exception
 			if (jobPost.getJobPostType().equals("JOB DEMAND") && Role.EMPLOYER.equals(user.getRole())
 					|| jobPost.getJobPostType().equals("JOB OFFER") && Role.FREELANCER.equals(user.getRole())) {
@@ -80,4 +82,38 @@ public class ApplicationServiceImpl implements ApplicationService { // Applicati
 		}
 
 	}
+
+	@Override
+	public ApplicationModel accept(ApplicationKey key) {
+		try {
+			Application appEntity = applicationRepository.findById(key)
+					.orElseThrow(() -> new ResourceNotFoundException("unvalid PK"));
+			appEntity.setAcceptDate(java.util.Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
+			appEntity.setApplicationStatus("ACCEPTED!");
+			applicationRepository.save(appEntity);
+			return applicationMapper.toModel(appEntity);
+		} catch (ResourceNotFoundException e) {
+			log.error(e.getMessage());
+			throw new AccessDeniedException(e.getMessage());
+		}
+		
+	}
+
+	@Override
+	public ApplicationModel refuse(ApplicationKey key) {
+		try {
+			Application appEntity = applicationRepository.findById(key)
+					.orElseThrow(() -> new ResourceNotFoundException("unvalid PK"));
+			appEntity.setRefuseDate(java.util.Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
+			appEntity.setApplicationStatus("REFUSED!");
+			applicationRepository.save(appEntity);
+			return applicationMapper.toModel(appEntity);
+		} catch (ResourceNotFoundException e) {
+			log.error(e.getMessage());
+			throw new AccessDeniedException(e.getMessage());
+		}
+		
+	}
+	
+	
 }

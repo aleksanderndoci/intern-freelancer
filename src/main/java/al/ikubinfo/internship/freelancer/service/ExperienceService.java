@@ -10,9 +10,7 @@ public interface ExperienceService {
 
 	ExperienceModel updateExperience(ExperienceModel experienceModel);
 
-	List<ExperienceModel> addExperiences(List<ExperienceModel> experienceModelList);
-
-	HttpStatus deleteExperience(int id);
+	HttpStatus deleteExperience(Integer id);
 
 	List<ExperienceModel> getExperiencesByUserId(int id);
 }

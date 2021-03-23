@@ -1,8 +1,12 @@
 package al.ikubinfo.internship.freelancer.model;
 
 import java.util.Date;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import al.ikubinfo.internship.freelancer.entity.Application;
 import lombok.Data;
 
 @Data
@@ -25,6 +29,7 @@ public class JobPostModel {
 	private String jobPostType;
 
 	private UserModel userModel;
+	
 
 	public JobPostModel() {
 		super();

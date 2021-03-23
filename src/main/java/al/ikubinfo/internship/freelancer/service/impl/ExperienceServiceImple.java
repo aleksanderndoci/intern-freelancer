@@ -77,21 +77,12 @@ public class ExperienceServiceImple implements ExperienceService {
 			throw new AccessDeniedException(e.getMessage());
 		}
 	}
-
 	@Override
-	public List<ExperienceModel> addExperiences(List<ExperienceModel> experienceModelList) {
-		List<Experience> experienceEntityList = expMapper.toEntityList(experienceModelList);
-		experienceRepository.saveAll(experienceEntityList);
-		return expMapper.toModelList(experienceEntityList);
-	}
-
-	@Override
-	public HttpStatus deleteExperience(int id) {
+	public HttpStatus deleteExperience(Integer id) {
 		try {
-			Experience experience = experienceRepository.getOne(id);
-			if (experience == null) {
-				throw new ResourceNotFoundException("enter a valid experience id");
-			}
+			Experience experience = experienceRepository.findById(id)
+					.orElseThrow(()-> new ResourceNotFoundException("invalid id"));
+			
 			experienceRepository.delete(experience);
 			return HttpStatus.NO_CONTENT;
 		} catch (ResourceNotFoundException e) {
@@ -105,7 +96,7 @@ public class ExperienceServiceImple implements ExperienceService {
 		try {
 			List<Experience> experienceEntityList = experienceRepository.findByUserId(userId);
 			if (experienceEntityList.isEmpty()) {
-				throw new ResourceNotFoundException("NO CONTENT");
+				throw new ResourceNotFoundException(String.format("No user with id %d. ", userId));
 			}
 			return expMapper.toModelList(experienceEntityList);
 		} catch (ResourceNotFoundException e) {

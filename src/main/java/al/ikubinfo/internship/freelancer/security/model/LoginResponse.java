@@ -1,4 +1,4 @@
-package al.ikubinfo.internship.freelancer.security.model;
+ package al.ikubinfo.internship.freelancer.security.model;
 
 import lombok.Data;
 

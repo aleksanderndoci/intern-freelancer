@@ -2,9 +2,12 @@ package al.ikubinfo.internship.freelancer.mapper.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import al.ikubinfo.internship.freelancer.entity.Application;
 import al.ikubinfo.internship.freelancer.entity.JobPost;
 import al.ikubinfo.internship.freelancer.entity.User;
 import al.ikubinfo.internship.freelancer.mapper.Mapper;
+import al.ikubinfo.internship.freelancer.model.ApplicationModel;
 import al.ikubinfo.internship.freelancer.model.JobPostModel;
 import al.ikubinfo.internship.freelancer.model.UserModel;
 
@@ -13,6 +16,10 @@ public class JobPostMapperImpl implements Mapper<JobPost, JobPostModel> {
 
 	@Autowired
 	private Mapper<User, UserModel> userMapper;
+	
+	@Autowired
+	private Mapper<Application, ApplicationModel> applicationMapper;
+
 
 	@Override
 	public JobPost toEntity(JobPostModel model) {

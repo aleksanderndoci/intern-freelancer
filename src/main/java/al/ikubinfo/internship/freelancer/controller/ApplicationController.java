@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
-import al.ikubinfo.internship.freelancer.entity.Application;
 import al.ikubinfo.internship.freelancer.entity.ApplicationKey;
 import al.ikubinfo.internship.freelancer.model.ApplicationModel;
 import al.ikubinfo.internship.freelancer.service.ApplicationService;

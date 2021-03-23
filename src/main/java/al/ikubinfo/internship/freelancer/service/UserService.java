@@ -6,16 +6,14 @@ import al.ikubinfo.internship.freelancer.entity.User;
 import al.ikubinfo.internship.freelancer.exception.ResourceNotFoundException;
 import al.ikubinfo.internship.freelancer.mapper.Mapper;
 import al.ikubinfo.internship.freelancer.model.BuildEmail;
-import al.ikubinfo.internship.freelancer.model.LoginRequest;
 import al.ikubinfo.internship.freelancer.model.RegistrationRequest;
+import al.ikubinfo.internship.freelancer.model.RegistrationResponse;
 import al.ikubinfo.internship.freelancer.model.UserModel;
 import al.ikubinfo.internship.freelancer.repository.UserRepository;
 import al.ikubinfo.internship.freelancer.service.registration.ConfirmationTokenService;
 import al.ikubinfo.internship.freelancer.service.registration.EmailSender;
-import al.ikubinfo.internship.freelancer.service.registration.EmailValidator;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,9 +21,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.UUID;
 
 @Service
@@ -38,9 +36,6 @@ public class UserService implements UserDetailsService {
 	@Autowired
 	private final UserRepository userRepository;
 
-//	@Autowired
-//	private final EmailValidator emailValidator;
-
 	@Autowired
 	private final PasswordEncoder passwordEncoder;
 
@@ -50,6 +45,7 @@ public class UserService implements UserDetailsService {
 	@Autowired
 	private EmailSender emailSender;
 
+	@Autowired
 	private final Mapper<User, UserModel> userMapper;
 
 	@Override
@@ -58,23 +54,21 @@ public class UserService implements UserDetailsService {
 				.orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND, email)));
 	}
 
-	public RegistrationRequest register(RegistrationRequest request) {
-
-//		boolean validEmail = emailValidator.test(request.getEmail());
-//		if (!validEmail) {
-//			throw new ResourceNotFoundException("EMAIL IS UNVALID!");
-//
-//		}
+	public RegistrationResponse register(RegistrationRequest request) {
 		try {
 			String token = signUpUser(new User(request.getName(), request.getSurname(), request.getEmail(),
 					request.getPassword(), request.getRole()));
 
 			String fullName = request.getName().concat(" " + request.getSurname());
 			String link = "http://localhost:8080/api/user/registration/confirm?token=" + token;
-            emailSender.sendEmail(request.getEmail(), new BuildEmail().getBuildEmail(fullName, link));
-			//emailSender.sendEmail(request.getEmail(), buildEmail(fullName, link));
+			emailSender.sendEmail(request.getEmail(), new BuildEmail().getBuildEmail(fullName, link));
 
-			return request;
+			RegistrationResponse response = new RegistrationResponse();
+			response.setEmail(request.getEmail());
+			response.setToken(token);
+			response.setDate(new Date());
+			response.setMessage(String.format("User with %s email is succefully registered!", request.getEmail()));
+			return response;
 
 		} catch (ResourceNotFoundException e) {
 			log.error(e.getMessage());
@@ -128,9 +122,7 @@ public class UserService implements UserDetailsService {
 			log.error(e.getMessage());
 			throw new AccessDeniedException(e.getMessage());
 		}
-		
 
 	}
-	
 
 }
