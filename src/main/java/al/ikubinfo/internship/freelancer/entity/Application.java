@@ -4,16 +4,8 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
 import javax.persistence.Table;
-
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-
 
 @Entity
 @Data
@@ -21,17 +13,7 @@ import lombok.Setter;
 public class Application {
 
 	@EmbeddedId
-	private ApplicationKey id; // mark PK
-//
-	@ManyToOne
-	@MapsId("jobPostId") 
-	@JoinColumn(name = "job_post_id")
-	private JobPost jobPost;
-	// fk
-	@ManyToOne
-	@MapsId("userId")
-	@JoinColumn(name = "user_id")
-	private User user;
+	private ApplicationKey id;
 
 	@Column(name = "application_status")
 	private String applicationStatus;

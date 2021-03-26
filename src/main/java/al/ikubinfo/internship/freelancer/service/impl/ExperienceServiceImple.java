@@ -1,29 +1,22 @@
 package al.ikubinfo.internship.freelancer.service.impl;
 
-import java.time.LocalDateTime;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import al.ikubinfo.internship.freelancer.entity.Experience;
-import al.ikubinfo.internship.freelancer.entity.JobPost;
 import al.ikubinfo.internship.freelancer.entity.User;
 import al.ikubinfo.internship.freelancer.exception.ResourceNotFoundException;
 import al.ikubinfo.internship.freelancer.mapper.Mapper;
 import al.ikubinfo.internship.freelancer.model.ExperienceModel;
-import al.ikubinfo.internship.freelancer.model.JobPostModel;
 import al.ikubinfo.internship.freelancer.repository.ExperienceRepository;
 import al.ikubinfo.internship.freelancer.repository.UserRepository;
 import al.ikubinfo.internship.freelancer.service.ExperienceService;
-import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Transactional
-@Slf4j
+
 public class ExperienceServiceImple implements ExperienceService {
 
 	@Autowired
@@ -32,6 +25,7 @@ public class ExperienceServiceImple implements ExperienceService {
 	@Autowired
 	private UserRepository userRepository;
 
+	@Autowired
 	private final Mapper<Experience, ExperienceModel> expMapper;
 
 	public ExperienceServiceImple(Mapper<Experience, ExperienceModel> expMapper,
@@ -42,26 +36,25 @@ public class ExperienceServiceImple implements ExperienceService {
 
 	@Override
 	public ExperienceModel addExperience(ExperienceModel experienceModel) {
-		try {
-			Experience expEntity = expMapper.toEntity(experienceModel);
-			User user = userRepository.findById(experienceModel.getUserModel().getId())
-					.orElseThrow(() -> new ResourceNotFoundException("unvalid user"));
+		Experience expEntity = expMapper.toEntity(experienceModel);
+		User user = userRepository.findById(experienceModel.getUserModel().getId())
+				.orElseThrow(() -> new ResourceNotFoundException("unvalid user"));
+		if (experienceModel.getEndDate().after(experienceModel.getStartDate())) {
 			expEntity.setUser(user);
 			experienceRepository.save(expEntity);
 			return expMapper.toModel(expEntity);
-		} catch (ResourceNotFoundException e) {
-			log.error(e.getMessage());
-			throw new AccessDeniedException(e.getMessage());
+		}else {
+			throw new ResourceNotFoundException("End date should be after start date");
 		}
 	}
 
 	@Override
 	public ExperienceModel updateExperience(ExperienceModel experienceModel) {
-		try {
-			Experience expEntity = expMapper.toEntity(experienceModel);
-			Experience expById = experienceRepository.findById(experienceModel.getId())
-					.orElseThrow(() -> new ResourceNotFoundException("Not found experience with id " + experienceModel.getId()));
+		Experience expEntity = expMapper.toEntity(experienceModel);
+		Experience expById = experienceRepository.findById(experienceModel.getId()).orElseThrow(
+				() -> new ResourceNotFoundException("Not found experience with id " + experienceModel.getId()));
 
+		if (expById.getUser().getId() == experienceModel.getUserModel().getId()) {
 			expEntity.setId(expById.getId());
 			expEntity.setNameOfCompany(experienceModel.getNameOfCompany());
 			expEntity.setPosition(experienceModel.getPosition());
@@ -72,36 +65,26 @@ public class ExperienceServiceImple implements ExperienceService {
 
 			experienceRepository.save(expEntity);
 			return expMapper.toModel(expEntity);
-		} catch (ResourceNotFoundException e) {
-			log.error(e.getMessage());
-			throw new AccessDeniedException(e.getMessage());
-		}
+		} else {
+			throw new ResourceNotFoundException(String.format("user with id %d has not experience with id %d",
+					experienceModel.getUserModel().getId(), expById.getId()));		}
 	}
+
 	@Override
 	public HttpStatus deleteExperience(Integer id) {
-		try {
-			Experience experience = experienceRepository.findById(id)
-					.orElseThrow(()-> new ResourceNotFoundException("invalid id"));
-			
-			experienceRepository.delete(experience);
-			return HttpStatus.NO_CONTENT;
-		} catch (ResourceNotFoundException e) {
-			log.error(e.getMessage());
-			throw new AccessDeniedException(e.getMessage());
-		}
+		Experience experience = experienceRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("invalid id"));
+
+		experienceRepository.delete(experience);
+		return HttpStatus.NO_CONTENT;
 	}
 
 	@Override
 	public List<ExperienceModel> getExperiencesByUserId(int userId) {
-		try {
-			List<Experience> experienceEntityList = experienceRepository.findByUserId(userId);
-			if (experienceEntityList.isEmpty()) {
-				throw new ResourceNotFoundException(String.format("No user with id %d. ", userId));
-			}
-			return expMapper.toModelList(experienceEntityList);
-		} catch (ResourceNotFoundException e) {
-			log.error(e.getMessage());
-			throw new AccessDeniedException(e.getMessage());
+		List<Experience> experienceEntityList = experienceRepository.findByUserId(userId);
+		if (experienceEntityList.isEmpty()) {
+			throw new ResourceNotFoundException(String.format("No user with id %d. ", userId));
 		}
+		return expMapper.toModelList(experienceEntityList);
 	}
 }

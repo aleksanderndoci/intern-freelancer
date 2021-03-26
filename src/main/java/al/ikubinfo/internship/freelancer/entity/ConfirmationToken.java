@@ -1,7 +1,6 @@
 package al.ikubinfo.internship.freelancer.entity;
 
 import java.time.LocalDateTime;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,13 +8,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @Entity
 public class ConfirmationToken {
@@ -46,7 +42,6 @@ public class ConfirmationToken {
 		this.token = token;
 		this.createdAt = createdAt;
 		this.expiresAt = expiredAt;
-		
 		this.user = user;
 	}
 

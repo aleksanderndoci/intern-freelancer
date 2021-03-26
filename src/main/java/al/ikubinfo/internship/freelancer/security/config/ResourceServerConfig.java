@@ -14,39 +14,33 @@ import org.springframework.security.oauth2.provider.token.ResourceServerTokenSer
 @Configuration
 @EnableResourceServer
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
-    @Autowired
-    private ResourceServerTokenServices tokenServices;
+	@Autowired
+	private ResourceServerTokenServices tokenServices;
 
-    @Value("${security.jwt.resource-ids}")
-    private String resourceIds;
+	@Value("${security.jwt.resource-ids}")
+	private String resourceIds;
 
-    @Autowired
-    private AppAuthenticationEntryPoint authorizationErrorHandler;
+	@Autowired
+	private AppAuthenticationEntryPoint authorizationErrorHandler;
 
-    @Autowired
-    private AppAccessDeniedHandler appAccessDeniedHandler;
+	@Autowired
+	private AppAccessDeniedHandler appAccessDeniedHandler;
 
-    @Override
-    public void configure(ResourceServerSecurityConfigurer resources) {
-        resources.resourceId(resourceIds).tokenServices(tokenServices);
-    }
+	@Override
+	public void configure(ResourceServerSecurityConfigurer resources) {
+		resources.resourceId(resourceIds).tokenServices(tokenServices);
+	}
 
-    @Override
-    public void configure(HttpSecurity http) throws Exception {
-        http
-                .requestMatchers()
-                .and()
-                .authorizeRequests()
-                .anyRequest()
-                .permitAll()
-//                .antMatchers("/actuator/**", "/api/api-docs**", "/api/swagger-ui**").permitAll()
-//                .antMatchers("/api/login", "/api/oauth/authorize**", "/api/oauth/token**").permitAll()
-                .and()
-                .formLogin()
-                .permitAll()
-                .and()
-                .exceptionHandling()
-                .authenticationEntryPoint(authorizationErrorHandler)
-                .accessDeniedHandler(appAccessDeniedHandler);
-    }
+	@Override
+	public void configure(HttpSecurity http) throws Exception {
+		http
+				.authorizeRequests()
+				.antMatchers("/actuator/**", "/api/api-docs**", "/api/swagger-ui/**").permitAll()
+				.antMatchers("/api/login", "/api/oauth/authorize**", "/api/oauth/token**").permitAll()
+				.antMatchers("/api/experience**", "/api/jobPost**", "/api/application**").hasAuthority("USER")
+				.antMatchers("/api/user**").hasAnyAuthority("ADMIN", "USER")
+				.and()
+				.exceptionHandling()
+				.authenticationEntryPoint(authorizationErrorHandler).accessDeniedHandler(appAccessDeniedHandler);
+	}
 }

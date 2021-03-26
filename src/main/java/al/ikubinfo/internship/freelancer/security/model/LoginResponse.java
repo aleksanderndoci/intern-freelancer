@@ -8,4 +8,5 @@ public class LoginResponse {
     private String token_type;
     private Long expires_in;
     private String scope;
+   
 }

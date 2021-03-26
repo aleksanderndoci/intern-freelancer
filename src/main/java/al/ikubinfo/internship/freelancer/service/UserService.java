@@ -2,7 +2,6 @@ package al.ikubinfo.internship.freelancer.service;
 
 import al.ikubinfo.internship.freelancer.entity.ConfirmationToken;
 import al.ikubinfo.internship.freelancer.entity.User;
-
 import al.ikubinfo.internship.freelancer.exception.ResourceNotFoundException;
 import al.ikubinfo.internship.freelancer.mapper.Mapper;
 import al.ikubinfo.internship.freelancer.model.BuildEmail;
@@ -16,6 +15,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,7 +24,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -50,8 +53,10 @@ public class UserService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-		return userRepository.findByEmail(email)
+		User user= userRepository.findByEmail(email)
 				.orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND, email)));
+		 GrantedAuthority authority = new SimpleGrantedAuthority(user.getRole().name());
+	        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), Arrays.asList(authority));
 	}
 
 	public RegistrationResponse register(RegistrationRequest request) {
@@ -61,13 +66,13 @@ public class UserService implements UserDetailsService {
 
 			String fullName = request.getName().concat(" " + request.getSurname());
 			String link = "http://localhost:8080/api/user/registration/confirm?token=" + token;
-			emailSender.sendEmail(request.getEmail(), new BuildEmail().getBuildEmail(fullName, link));
+			emailSender.sendEmail(request.getEmail(), new BuildEmail(fullName, link).getBuildEmail());
 
 			RegistrationResponse response = new RegistrationResponse();
 			response.setEmail(request.getEmail());
 			response.setToken(token);
 			response.setDate(new Date());
-			response.setMessage(String.format("User with %s email is succefully registered!", request.getEmail()));
+			response.setMessage(String.format("User with %s email is succefully registered! Confirm your email to log in", request.getEmail()));
 			return response;
 
 		} catch (ResourceNotFoundException e) {
@@ -124,5 +129,29 @@ public class UserService implements UserDetailsService {
 		}
 
 	}
-
+	
+	public boolean checkIfEnabled(String email) {
+		return userRepository.checkIfenabled(email);
+	}
+	
+	public Optional<User> findByEmail(String email){
+		return userRepository.findByEmail(email);
+	}
+	
+	public void changePassword(Integer id, String oldPassword,String newPassword,String newPasswordRetyped) {
+		try {
+			User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+	        if (oldPassword == null || oldPassword.isEmpty() || (passwordEncoder.matches(oldPassword, user.getPassword()) && newPassword.equals(newPasswordRetyped))) {
+	            user.setPassword(passwordEncoder.encode(newPassword));
+	            userRepository.save(user);
+	        } else {
+	            throw new ResourceNotFoundException(" passwords doesn't match");
+	        }
+		} catch (ResourceNotFoundException e) {
+			log.error(e.getMessage());
+			throw new AccessDeniedException(e.getMessage());
+		}
+		
+	}
+	
 }

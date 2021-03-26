@@ -5,7 +5,6 @@ import al.ikubinfo.internship.freelancer.entity.Application;
 import al.ikubinfo.internship.freelancer.mapper.Mapper;
 import al.ikubinfo.internship.freelancer.model.ApplicationModel;
 
-
 @Component
 public class ApplicationMapperImpl implements Mapper<Application, ApplicationModel> {
 	@Override
